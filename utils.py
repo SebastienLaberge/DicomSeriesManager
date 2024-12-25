@@ -177,12 +177,16 @@ def get_window_limits(
 
             attr = getattr(dataset, keyword)
 
-            assert isinstance(attr, MultiValue)
-            if window >= len(attr):
+            if isinstance(attr, MultiValue):
 
-                raise ValueError("window index out of range")
+                if window < 0 or window >= len(attr):
 
-            return np.float32(attr[window])
+                    raise ValueError(
+                        "window index out of range")
+
+                attr = attr[window]
+
+            return np.float32(attr)
 
         window_center = \
             get_window_attr(dataset, window, "WindowCenter")
